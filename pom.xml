@@ -1,29 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>br.com.gsw.example</groupId>
     <artifactId>liquibase</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
-        <!-- profiles -->
+        <!--  profiles  -->
         <build.profile.id>local</build.profile.id>
-        <!-- dependencies -->
+        <!--  dependencies  -->
         <spring.version>1.2.7.RELEASE</spring.version>
-        <oracle.version>19.8.0.0</oracle.version> <!-- Updated Oracle version -->
         <liquibase.version>3.4.1</liquibase.version>
-        <!-- structure -->
+        <!--  structure  -->
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
     <repositories>
-        <!-- Oracle Maven Repository -->
+        <!--  Oracle Maven Repository (Remove if not using Oracle)  -->
         <repository>
             <id>oracle-repo</id>
             <url>https://maven.oracle.com</url>
@@ -31,34 +26,33 @@
     </repositories>
 
     <dependencies>
-        <!-- Spring -->
+        <!--  Spring  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- Database -->
-        <!-- Updated to ojdbc8 instead of ojdbc14 -->
+        <!--  MySQL Database  -->
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>${oracle.version}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.29</version> <!-- Use the latest version available -->
         </dependency>
 
+        <!--  Liquibase Core  -->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency>
 
-        <!-- Test Dependencies -->
+        <!--  Test Dependencies  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -69,6 +63,7 @@
 
     <build>
         <plugins>
+            <!--  Spring Boot Maven Plugin  -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -77,6 +72,8 @@
                     <addResources>false</addResources>
                 </configuration>
             </plugin>
+
+            <!--  Maven WAR Plugin  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -85,20 +82,23 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+
+            <!--  Liquibase Maven Plugin  -->
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
-
                 <configuration>
                     <verbose>true</verbose>
                     <changeLogFile>db/db.master.xml</changeLogFile>
-                    <driver>oracle.jdbc.driver.OracleDriver</driver>
+                    <driver>com.mysql.cj.jdbc.Driver</driver> <!-- MySQL Driver -->
+                    <url>jdbc:mysql://database.cb4kk8iiuvdy.ap-south-1.rds.amazonaws.com:3306/fis</url> <!-- MySQL DB URL -->
+                    <username>admin</username> <!-- MySQL username -->
+                    <password>Admin12345</password> <!-- MySQL password -->
                     <contexts>local</contexts>
                     <promptOnNonLocalDatabase>true</promptOnNonLocalDatabase>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>
