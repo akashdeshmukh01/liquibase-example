@@ -14,13 +14,21 @@
         <build.profile.id>local</build.profile.id>
         <!-- dependencies -->
         <spring.version>1.2.7.RELEASE</spring.version>
-        <oracle.version>10.2.0.4.0</oracle.version>
+        <oracle.version>19.8.0.0</oracle.version> <!-- Updated Oracle version -->
         <liquibase.version>3.4.1</liquibase.version>
         <!-- structure -->
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
+
+    <repositories>
+        <!-- Oracle Maven Repository -->
+        <repository>
+            <id>oracle-repo</id>
+            <url>https://maven.oracle.com</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!-- Spring -->
@@ -37,9 +45,10 @@
         </dependency>
 
         <!-- Database -->
+        <!-- Updated to ojdbc8 instead of ojdbc14 -->
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
             <version>${oracle.version}</version>
         </dependency>
 
@@ -49,10 +58,7 @@
             <version>${liquibase.version}</version>
         </dependency>
 
-        <!--
-        ## Testes ##
-        -->
-        <!-- Spring Tests + JUnit -->
+        <!-- Test Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -84,10 +90,6 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
 
-                <!-- Use to clear checksum, rollback, migrate and etc.
-                     Update are included in clean install
-                    # mvn liquibase:clearCheckSums -Dliquibase.url= -Dliquibase.username= -Dliquibase.password=
-                -->
                 <configuration>
                     <verbose>true</verbose>
                     <changeLogFile>db/db.master.xml</changeLogFile>
